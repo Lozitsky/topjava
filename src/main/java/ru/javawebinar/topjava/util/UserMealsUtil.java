@@ -33,7 +33,7 @@ public class UserMealsUtil {
                 .filter(userMeal -> TimeUtil.isBetween(userMeal.getDateTime().toLocalTime(), startTime, endTime))
                 .flatMap(userMeal -> Stream.of(new UserMealWithExceed(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(),
                         mealList.stream()
-                                .collect(Collectors.groupingBy(o -> o.getDateTime().toLocalDate(), Collectors.summingInt(value -> value.getCalories())))
+                                .collect(Collectors.groupingBy(meal -> meal.getDateTime().toLocalDate(), Collectors.summingInt(meal -> meal.getCalories())))
                                 .get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay)))
                 .collect(Collectors.toList());
     }
