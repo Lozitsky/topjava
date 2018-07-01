@@ -39,29 +39,28 @@ https://forums.adobe.com/thread/495122
         <th>Date/Time</th>
         <th>Description</th>
         <th>Calories</th>
-        <%--<th></th>
-        <th></th>--%>
+        <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
 
     <c:forEach items="${exceededList}" var="name">
         <jsp:useBean id="name" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
-        <%--<% String tColor = "green"; %>
-        <c:if test="${name.exceed}">
-            <% tColor = "red"; %>
-        </c:if>--%>
 
         <% String tColor = name.isExceed() ? "red" : "green"; %>
         <tr>
-            <td class="<%= tColor %>"><%=TimeUtil.DateFormat(name.getDateTime())%>
+            <td class="<%= tColor %>"><%=TimeUtil.formatToString(name.getDateTime())%>
             </td>
             <td class="<%= tColor %>">${name.description}</td>
             <td class="<%= tColor %>">${name.calories}</td>
+            <td><a href="meals?action=update&mealId=<c:out value="${name.id}"/>">Update</a> </td>
+            <td><a href="meals?action=delete&mealId=<c:out value="${name.id}"/>">Delete</a> </td>
         </tr>
 
     </c:forEach>
     </tbody>
 </table>
+<p><a href="meals?action=create">Add Meal</a></p>
 </body>
 </html>

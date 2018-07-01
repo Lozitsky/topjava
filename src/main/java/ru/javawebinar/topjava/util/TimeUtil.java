@@ -9,8 +9,13 @@ public class TimeUtil {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
     }
 
-    public static String DateFormat(LocalDateTime localDateTime) {
+    public static String formatToString(LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return localDateTime.format(formatter);
+    }
+
+    public static LocalDateTime parseToLocalDateTime(String str, String expression) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(expression);
+        return LocalDateTime.parse(str, formatter);
     }
 }
