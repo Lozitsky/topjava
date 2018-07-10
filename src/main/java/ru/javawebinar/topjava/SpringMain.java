@@ -4,7 +4,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
@@ -44,20 +43,6 @@ public class SpringMain {
                     LocalTime.of(1, 1),
                     LocalDate.of(2015, Month.MAY, 30),
                     LocalTime.of(23, 55)));
-
-/*            MealRepository mealRepository = appCtx.getBean(MealRepository.class);
-            System.out.println(mealRepository.getAll());
-            System.out.println(mealRepository.get(5));
-            SecurityUtil.setId(1);
-            User user = adminUserController.get(1);
-            System.out.println(adminUserController.getAll());
-            System.out.println(user);
-
-            mealRepository = appCtx.getBean(MealRepository.class);
-            System.out.println(mealRepository.getAll());
-            System.out.println(mealRepository.get(5));*/
-
-//            adminUserController.delete(1);
         }
     }
 }

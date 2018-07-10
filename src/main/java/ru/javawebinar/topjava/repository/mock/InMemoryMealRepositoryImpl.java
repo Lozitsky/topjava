@@ -30,7 +30,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal save(Meal meal, int userId) {
         log.debug("save meal {}, user id {}", meal, userId);
-        if (meal.getUserId() != userId) {
+
+        Integer mealUserId = meal.getUserId();
+        if (mealUserId == null || mealUserId != userId) {
 //            new NotFoundException("Meal was not changed. The wrong user!");
             return null;
         }
@@ -47,7 +49,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     public boolean delete(int id, int userId) {
         Integer idUser = repository.get(id).getUserId();
         log.debug("delete, meal id {}, userId {}", id, userId);
-        if (idUser != userId) {
+        if (idUser == null || userId != idUser) {
 //            new NotFoundException("It is not your meal!");
             return false;
         }
@@ -56,22 +58,21 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        Integer idUser = repository.get(id).getUserId();
+        Meal meal = repository.get(id);
+        Integer idUser = null;
+        if (meal != null) {
+            idUser = meal.getUserId();
+        }
         log.debug("get, meal id {}, userId {}", id, userId);
-        if (idUser != userId) {
+        if (idUser == null || userId != idUser) {
 //            new NotFoundException("It is not your meal!");
             return null;
         }
-        return repository.get(id);
+        return meal;
     }
 
     @Override
     public Collection <Meal> getAll(int userId) {
-
-        /*return repository.values().stream()
-                .filter(meal -> SecurityUtil.checkUser(meal.getUserId()))
-                .sorted((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()))
-                .collect(Collectors.toList());*/
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
                 .collect(Collectors.toList());

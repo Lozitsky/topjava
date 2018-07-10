@@ -40,13 +40,12 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void update(Meal meal, int userId) {
-        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+        checkNotFoundWithId(repository.save(meal, userId), userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
         return repository.getAll(userId).stream()
-//                .filter(meal -> SecurityUtil.checkUser(meal.getUserId()))
                 .sorted((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()))
                 .collect(Collectors.toList());
     }
