@@ -28,10 +28,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     public User save(User user) {
         log.info("save {}", user);
         if (user.isNew()) {
-            Optional <User> userOptional = repository.values().stream()
-                    .filter(user1 -> user1.getEmail().equals(user.getEmail()))
-                    .findFirst();
-            if (!userOptional.isPresent()) {
+            if (getByEmail(user.getEmail()) == null) {
                 user.setId(counter.incrementAndGet());
                 return repository.put(user.getId(), user);
             }
@@ -58,7 +55,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         log.info("getByEmail {}", email);
         return repository.values().stream()
                 .filter(user -> user.getEmail().equals(email))
-//                .findFirst().orElseThrow(() -> new NotFoundException("bad request"));
-        .findAny().orElse(null);
+                .findAny().orElse(null);
     }
 }
