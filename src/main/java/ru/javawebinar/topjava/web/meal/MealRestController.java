@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
@@ -33,7 +34,7 @@ public class MealRestController {
         checkNew(meal);
         int userId = SecurityUtil.authUserId();
         log.info("create {}, user id", meal, userId);
-        return service.create(meal, userId);
+        return service.create(meal);
     }
 
     public void delete(int id) {
@@ -58,8 +59,12 @@ public class MealRestController {
     public List <MealWithExceed> getMealsBetweenLocalDateTimes(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
         log.info("getMealsBetweenLocalDateTimes({}, {}, {}, {}), user id = {}", startDate, startTime, endDate, endTime, userId);
+        LocalTime timeStart = startTime == null ? DateTimeUtil.Min_Time : startTime;
+        LocalTime timeEnd = endTime == null ? DateTimeUtil.Max_Time : endTime;
+        LocalDate dateStart = startDate == null ? DateTimeUtil.Min_Date : startDate;
+        LocalDate dateEnd = endDate == null ? DateTimeUtil.Max_Date : endDate;
 //        return MealsUtil.getFilteredWithExceeded(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay(), startDate, startTime, endDate, endTime);
-        return MealsUtil.getFilteredWithExceeded(service.getMealsBetweenLocalDate(startDate, endDate, userId), SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
+        return MealsUtil.getFilteredWithExceeded(service.getMealsBetweenLocalDate(dateStart, dateEnd, userId), SecurityUtil.authUserCaloriesPerDay(), timeStart, timeEnd);
     }
 
 

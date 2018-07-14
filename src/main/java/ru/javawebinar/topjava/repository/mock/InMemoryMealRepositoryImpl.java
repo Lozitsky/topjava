@@ -6,9 +6,13 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,19 +27,22 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
-        MealsUtil.MEALS.forEach(meal -> save(meal, 2));
+        SecurityUtil.setId(1);
+        MealsUtil.MEALS.forEach(meal -> save(meal));
+        SecurityUtil.setId(2);
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510));
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500));
     }
 
     @Override
-    public Meal save(Meal meal, int userId) {
-        log.debug("save meal {}, user id {}", meal, userId);
+    public Meal save(Meal meal) {
+        log.debug("save meal {}, user id {}", meal, meal.getUserId());
 
         Integer mealUserId = meal.getUserId();
-        if (mealUserId == null || mealUserId != userId) {
+/*        if (mealUserId == null || mealUserId != userId) {
 //            new NotFoundException("Meal was not changed. The wrong user!");
             return null;
-        }
+        }*/
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
@@ -83,6 +90,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
                 .filter(meal -> DateTimeUtil.isBetweenDateOrTime(meal.getDate(), startDate, endDate))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
 

@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface MealService {
-    Meal create(Meal meal, int i);
+    Meal create(Meal meal);
 
     void delete(int id, int userId) throws NotFoundException;
 
