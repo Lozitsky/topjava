@@ -1,5 +1,8 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -8,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.javawebinar.topjava.MyJUnitStopWatch;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -25,6 +29,22 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+
+    @Rule
+    public MyJUnitStopWatch stopwatch = new MyJUnitStopWatch();
+
+/*    private String uniqueChars = null;
+
+    @Before
+    public void before(){
+        uniqueChars = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnop";
+    }
+
+    @After
+    public void after(){
+        uniqueChars = "";
+    }*/
+
 
     static {
         SLF4JBridgeHandler.install();
