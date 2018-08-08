@@ -43,14 +43,12 @@ public class JspMealController extends AbstractMealController {
         return "mealForm";
     }
 
-    //    @GetMapping("/meals")
     @RequestMapping(method = RequestMethod.GET)
     public String getMeals(Model model) {
         model.addAttribute("meals", super.getAll());
-        return "meals";
+        return "/meals";
     }
 
-    //    @PostMapping("/meals")
     @RequestMapping(method = RequestMethod.POST)
     public String save(HttpServletRequest request) {
         Meal meal = new Meal(
@@ -73,7 +71,7 @@ public class JspMealController extends AbstractMealController {
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
         request.setAttribute("meals", super.getBetween(startDate, startTime, endDate, endTime));
-        return "meals";
+        return "/meals";
     }
 
     private int getId(HttpServletRequest request) {
