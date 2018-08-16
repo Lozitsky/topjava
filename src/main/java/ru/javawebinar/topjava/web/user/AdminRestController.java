@@ -1,11 +1,11 @@
 package ru.javawebinar.topjava.web.user;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class AdminRestController extends AbstractUserController {
 
     @Override
