@@ -6,8 +6,11 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.javawebinar.topjava.MealTestData.MEAL1;
+import static ru.javawebinar.topjava.MealTestData.MEAL1_ID;
 import static ru.javawebinar.topjava.UserTestData.USER;
-import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
+//import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 class RootControllerTest extends AbstractControllerTest {
 
@@ -21,9 +24,26 @@ class RootControllerTest extends AbstractControllerTest {
                 .andExpect(model().attribute("users", hasSize(2)))
                 .andExpect(model().attribute("users", hasItem(
                         allOf(
-                                hasProperty("id", is(START_SEQ)),
+                                hasProperty("id", is(USER_ID)),
                                 hasProperty("name", is(USER.getName()))
                         )
+                )));
+    }
+
+    @Test
+    void testMeals() throws Exception {
+        mockMvc.perform(get("/meals"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("meals"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
+                .andExpect(model().attribute("meals", hasSize(6)))
+                .andExpect(model().attribute("meals", hasItem(
+                    allOf(
+                            hasProperty("id", is(MEAL1_ID)),
+                            hasProperty("description", is(MEAL1.getDescription())),
+                            hasProperty("calories", is(MEAL1.getCalories()))
+                    )
                 )));
     }
 }
